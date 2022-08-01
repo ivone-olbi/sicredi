@@ -1,0 +1,1928 @@
+{
+	"info": {
+		"_postman_id": "1ffca231-54cf-4351-8175-a70f624756b4",
+		"name": "Sicredi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET <host>/api/v1/restricoes/{cpf}",
+			"item": [
+				{
+					"name": "NAO DEVE consultar restrições DADO CPF inválido alphanumérico.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/restricoes/{{cpf_invalido_alphanumerico}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restricoes",
+								"{{cpf_invalido_alphanumerico}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE consultar restrições DADO CPF inválido numérico.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/restricoes/{{cpf_invalido_numerico}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restricoes",
+								"{{cpf_invalido_numerico}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DEVE consultar restrições DADO CPF sem restrição.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" */\r",
+									"pm.test(\"Status = 204 No Content\", () => pm.response.to.have.status(204))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/restricoes/{{cpf}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restricoes",
+								"{{cpf}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DEVE consultar restrições DADO CPF com restrição.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let cpf = pm.variables.get(\"cpf_restricao\")\r",
+									"\r",
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" */\r",
+									"pm.test(\"Status = 200 OK\", () => pm.response.to.have.status(200))\r",
+									"pm.test(\"Body is correct\", () => pm.response.to.have.body(`{\"mensagem\":\"O CPF ${cpf} tem problema\"}`))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/restricoes/{{cpf_restricao}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restricoes",
+								"{{cpf_restricao}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POST <host>/api/v1/simulacoes",
+			"item": [
+				{
+					"name": "NAO DEVE criar uma simulação QUANDO nome vazio.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))\r",
+									"pm.test(\"Body is correct\", () => pm.response.to.have.body(`{\"erros\":{\"nome\":\"Nome não pode ser vazio\"}}`))"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cpf\": {{cpf}},\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"valor\": {{valor_maximo}},\r\n    \"parcelas\": {{parcela_maxima}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE criar uma simulação QUANDO CPF vazio.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))\r",
+									"pm.test(\"Body is correct\", () => pm.response.to.have.body(`{\"erros\":{\"cpf\":\"CPF não pode ser vazio\"}}`))"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"{{$randomFullName}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"valor\": {{valor_maximo}},\r\n    \"parcelas\": {{parcela_maxima}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE criar uma simulação QUANDO e-mail vazio.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))\r",
+									"pm.test(\"Body is correct\", () => pm.response.to.have.body(`{\"erros\":{\"email\":\"E-mail não deve ser vazio\"}}`))"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"{{$randomFullName}}\",\r\n    \"cpf\": {{cpf}},\r\n    \"valor\": {{valor_maximo}},\r\n    \"parcelas\": {{parcela_maxima}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE criar uma simulação QUANDO valor vazio.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))\r",
+									"pm.test(\"Body is correct\", () => pm.response.to.have.body(`{\"erros\":{\"valor\":\"Valor não pode ser vazio\"}}`))"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"{{$randomFullName}}\",\r\n    \"cpf\": {{cpf}},\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"parcelas\": {{parcela_maxima}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE criar uma simulação QUANDO parcelas vazio.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))\r",
+									"pm.test(\"Body is correct\", () => pm.response.to.have.body(`{\"erros\":{\"parcelas\":\"Parcelas não pode ser vazio\"}}`))"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"{{$randomFullName}}\",\r\n    \"cpf\": {{cpf}},\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"valor\": {{valor_maximo}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE criar uma simulação QUANDO seguro vazio.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"{{$randomFullName}}\",\r\n    \"cpf\": {{cpf}},\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"valor\": {{valor_maximo}},\r\n    \"parcelas\": {{parcela_maxima}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE criar uma simulação DADO CPF \"duplicado\".",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))\r",
+									"pm.test(\"Body is correct\", () => pm.response.to.have.body(`{\"mensagem\":\"CPF duplicado\"}`))"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "simulacao",
+								"value": "nova",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"{{$randomFullName}}\",\r\n    \"cpf\": {{cpf}},\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"valor\": {{valor_minimo}},\r\n    \"parcelas\": {{parcela_maxima}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE criar uma simulação DADO CPF inválido alphanumérico.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400)) "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"{{$randomFullName}}\",\r\n    \"cpf\": \"{{cpf_invalido_alphanumerico}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"valor\": {{valor_maximo}},\r\n    \"parcelas\": {{parcela_maxima}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE criar uma simulação DADO CPF inválido numérico.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"{{$randomFullName}}\",\r\n    \"cpf\": {{cpf_invalido_numerico}},\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"valor\": {{valor_maximo}},\r\n    \"parcelas\": {{parcela_maxima}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE criar uma simulação DADO e-mail inválido.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))\r",
+									"pm.test(\"Body is correct\", () => pm.response.to.have.body(`{\"erros\":{\"email\":\"E-mail deve ser um e-mail válido\"}}`))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"{{$randomFullName}}\",\r\n    \"cpf\": {{cpf}},\r\n    \"email\": \"email-invalido.com.br\",\r\n    \"valor\": {{valor_maximo}},\r\n    \"parcelas\": {{parcela_maxima}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE criar uma simulação DADO parcela acima da máxima.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"parcela_maxima+1\", pm.variables.get(\"parcela_maxima\") + 1)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"{{$randomFullName}}\",\r\n    \"cpf\": {{cpf}},\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"valor\": {{valor_maximo}},\r\n    \"parcelas\": {{parcela_maxima+1}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE criar uma simulação DADO parcela abaixo da miníma.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))\r",
+									"pm.test(\"Body is correct\", () => pm.response.to.have.body(`{\"erros\":{\"parcelas\":\"Parcelas deve ser igual ou maior que 2\"}}`))"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"parcela_minima-1\", pm.variables.get(\"parcela_minima\") - 1)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"{{$randomFullName}}\",\r\n    \"cpf\": {{cpf}},\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"valor\": {{valor_maximo}},\r\n    \"parcelas\": {{parcela_minima-1}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE criar uma simulação DADO valor acima do máximo.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))\r",
+									"pm.test(\"Body is correct\", () => pm.response.to.have.body(`{\"erros\":{\"valor\":\"Valor deve ser menor ou igual a R$ 40.000\"}}`))"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"valor_maximo+1\", pm.variables.get(\"valor_maximo\") + 1)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"{{$randomFullName}}\",\r\n    \"cpf\": {{cpf}},\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"valor\": {{valor_maximo+1}},\r\n    \"parcelas\": {{parcela_maxima}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE criar uma simulação DADO valor abaixo do minímo.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"valor_minimo+1\", pm.variables.get(\"valor_minimo\") - 1)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"{{$randomFullName}}\",\r\n    \"cpf\": {{cpf}},\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"valor\": {{valor_minimo+1}},\r\n    \"parcelas\": {{parcela_maxima}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DEVE criar uma simulação DADO informações corretas com valor máximo.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 201 Created\", () => pm.response.to.have.status(201))\r",
+									"pm.test(\"Body is correct\", () => pm.expect(pm.response.text()).to.match(/{\"id\":[0-9]*,\"nome\":\"Einstein\",\"cpf\":\"23650409003\",\"email\":\"Einstein@email\\.com\",\"valor\":40000,\"parcelas\":48,\"seguro\":true}/))"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Einstein\",\r\n    \"cpf\": {{cpf}},\r\n    \"email\": \"Einstein@email.com\",\r\n    \"valor\": {{valor_maximo}},\r\n    \"parcelas\": {{parcela_maxima}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DEVE criar uma simulação DADO informações corretas com valor minímo.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 201 Created\", () => pm.response.to.have.status(201))\r",
+									"pm.test(\"Body is correct\", () => pm.expect(pm.response.text()).to.match(/{\"id\":[0-9]*,\"nome\":\"Einstein\",\"cpf\":\"23650409003\",\"email\":\"Einstein@email\\.com\",\"valor\":1000,\"parcelas\":2,\"seguro\":true}/))"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Einstein\",\r\n    \"cpf\": {{cpf}},\r\n    \"email\": \"Einstein@email.com\",\r\n    \"valor\": {{valor_minimo}},\r\n    \"parcelas\": {{parcela_minima}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DEVE criar uma simulação DADO informações sem seguro.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 201 Created\", () => pm.response.to.have.status(201))\r",
+									"pm.test(\"Body is correct\", () => pm.expect(pm.response.text()).to.match(/{\"id\":[0-9]*,\"nome\":\"Einstein\",\"cpf\":\"23650409003\",\"email\":\"Einstein@email\\.com\",\"valor\":1000,\"parcelas\":2,\"seguro\":false}/))"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Einstein\",\r\n    \"cpf\": {{cpf}},\r\n    \"email\": \"Einstein@email.com\",\r\n    \"valor\": {{valor_minimo}},\r\n    \"parcelas\": {{parcela_minima}},\r\n    \"seguro\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "PUT <host>/api/v1/simulacoes/{cpf}",
+			"item": [
+				{
+					"name": "NAO DEVE atualizar a simulação DADO CPF duplicado.",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let host = pm.environment.get(\"host\")\r",
+									"let cpfDuplicado = \"16238900040\"\r",
+									"\r",
+									"let simulacao = {\r",
+									"    \"nome\": pm.variables.replaceIn('{{$randomFullName}}'),\r",
+									"    \"cpf\": cpfDuplicado,\r",
+									"    \"email\": pm.variables.replaceIn('{{$randomEmail}}'),\r",
+									"    \"valor\": pm.variables.get(\"valor_maximo\"),\r",
+									"    \"parcelas\": pm.variables.get(\"parcela_maxima\"),\r",
+									"    \"seguro\": true\r",
+									"}\r",
+									"\r",
+									"pm.sendRequest({ \r",
+									"    method: \"POST\",    \r",
+									"    url: `${host}/api/v1/simulacoes`,\r",
+									"    header: { \"Content-Type\": \"application/json\" },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(simulacao)\r",
+									"    }\r",
+									"}, (error, response) => {\r",
+									"    pm.variables.set(\"simulacao_id\", response.json().id)\r",
+									"})\r",
+									"\r",
+									"pm.variables.set(\"cpf_duplicado\", cpfDuplicado)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))\r",
+									"pm.test(\"Body is correct\", () => pm.response.to.have.body(`{\"mensagem\":\"CPF duplicado\"}`))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "simulacao",
+								"value": "nova",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"cpf\": \"{{cpf_duplicado}}\",\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes/{{cpf}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes",
+								"{{cpf}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE atualizar a simulação DADO CPF inválido numérico.",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "simulacao",
+								"value": "nova",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"cpf\": {{cpf_invalido_numerico}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes/{{cpf}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes",
+								"{{cpf}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE atualizar a simulação DADO CPF não encontrado.",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 404 Not Found\", () => pm.response.to.have.status(404))\r",
+									"pm.test(\"Body is correct\", () => pm.response.to.have.body(`{\"mensagem\":\"CPF 23650409003 não encontrado\"}`))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"cpf\": \"{{cpf_duplicado}}\",\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes/{{cpf}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes",
+								"{{cpf}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE atualizar a simulação DADO parcela acima da máxima.",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"parcela_maxima+1\", pm.variables.get(\"parcela_maxima\") + 1)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "simulacao",
+								"value": "nova",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"parcelas\": {{parcela_maxima+1}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes/{{cpf}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes",
+								"{{cpf}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE atualizar a simulação DADO parcela abaixo da miníma.",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"parcela_minima-1\", pm.variables.get(\"parcela_minima\") - 1)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 400 Bad Request\", () => pm.response.to.have.status(400))\r",
+									"pm.test(\"Body is correct\", () => {\r",
+									"    pm.response.to.have.body(`{\"erros\":{\"parcelas\":\"Parcelas deve ser igual ou maior que 2\"}}`)})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "simulacao",
+								"value": "nova",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"parcelas\": {{parcela_minima-1}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes/{{cpf}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes",
+								"{{cpf}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE atualizar a simulação DADO valor acima do máximo.",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"valor_maximo+1\", pm.variables.get(\"valor_maximo\") + 1)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 200 OK\", () => pm.response.to.have.status(200))\r",
+									"pm.test(\"Body is correct\", () => pm.expect(pm.response.text()).to.match(/{\"id\":[0-9]*,\"nome\":\".*\",\"cpf\":\"23650409003\",\"email\":\".*\",\"valor\":40000.00,\"parcelas\":48,\"seguro\":true}/))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "simulacao",
+								"value": "nova",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"valor\": {{valor_maximo+1}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes/{{cpf}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes",
+								"{{cpf}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NAO DEVE atualizar a simulação DADO valor abaixo do minímo.",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"valor_minimo-1\", pm.variables.get(\"valor_minimo\") - 1)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 200 OK\", () => pm.response.to.have.status(200))\r",
+									"pm.test(\"Body is correct\", () => pm.expect(pm.response.text()).to.match(/{\"id\":[0-9]*,\"nome\":\".*\",\"cpf\":\"23650409003\",\"email\":\".*\",\"valor\":40000.00,\"parcelas\":48,\"seguro\":true}/))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "simulacao",
+								"value": "nova",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"valor\": {{valor_minimo-1}},\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes/{{cpf}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes",
+								"{{cpf}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DEVE atualizar a simulação DADO nome.",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 200 OK\", () => pm.response.to.have.status(200))\r",
+									"pm.test(\"Body is correct\", () => pm.expect(pm.response.text()).to.match(/{\"id\":[0-9]*,\"nome\":\"Shakespeare\",\"cpf\":\"23650409003\",\"email\":\".*\",\"valor\":40000.00,\"parcelas\":48,\"seguro\":true}/))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "simulacao",
+								"value": "nova",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"nome\": \"Shakespeare\",\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes/{{cpf}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes",
+								"{{cpf}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DEVE atualizar a simulação DADO CPF.",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 200 OK\", () => pm.response.to.have.status(200))\r",
+									"pm.test(\"Body is correct\", () => pm.expect(pm.response.text()).to.match(/{\"id\":[0-9]*,\"nome\":\".*\",\"cpf\":\"43607138001\",\"email\":\".*\",\"valor\":40000.00,\"parcelas\":48,\"seguro\":true}/))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "simulacao",
+								"value": "nova",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"cpf\": \"43607138001\",\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes/{{cpf}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes",
+								"{{cpf}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DEVE atualizar a simulação DADO e-mail.",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 200 OK\", () => pm.response.to.have.status(200))\r",
+									"pm.test(\"Body is correct\", () => pm.expect(pm.response.text()).to.match(/{\"id\":[0-9]*,\"nome\":\".*\",\"cpf\":\"23650409003\",\"email\":\"Shakespeare@email.com\",\"valor\":40000.00,\"parcelas\":48,\"seguro\":true}/))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "simulacao",
+								"value": "nova",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"email\": \"Shakespeare@email.com\",\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes/{{cpf}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes",
+								"{{cpf}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DEVE atualizar a simulação DADO valor.",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 200 OK\", () => pm.response.to.have.status(200))\r",
+									"pm.test(\"Body is correct\", () => pm.expect(pm.response.text()).to.match(/{\"id\":[0-9]*,\"nome\":\".*\",\"cpf\":\"23650409003\",\"email\":\".*\",\"valor\":2000.00,\"parcelas\":48,\"seguro\":true}/))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "simulacao",
+								"value": "nova",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"valor\": \"2000\",\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes/{{cpf}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes",
+								"{{cpf}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DEVE atualizar a simulação DADO parcela.",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 200 OK\", () => pm.response.to.have.status(200))\r",
+									"pm.test(\"Body is correct\", () => pm.expect(pm.response.text()).to.match(/{\"id\":[0-9]*,\"nome\":\".*\",\"cpf\":\"23650409003\",\"email\":\".*\",\"valor\":40000.00,\"parcelas\":5,\"seguro\":true}/))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "simulacao",
+								"value": "nova",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"parcelas\": \"5\",\r\n    \"seguro\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes/{{cpf}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes",
+								"{{cpf}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DEVE atualizar a simulação DADO seguro.",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									" * Sicredi - Time <= 200 ms\r",
+									" * Sicredi - Limpa o(s) cenario(s)\r",
+									" */\r",
+									"pm.test(\"Status = 200 OK\", () => pm.response.to.have.status(200))\r",
+									"pm.test(\"Body is correct\", () => pm.expect(pm.response.text()).to.match(/{\"id\":[0-9]*,\"nome\":\".*\",\"cpf\":\"23650409003\",\"email\":\".*\",\"valor\":40000.00,\"parcelas\":48,\"seguro\":false}/))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "simulacao",
+								"value": "nova",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"seguro\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/simulacoes/{{cpf}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"simulacoes",
+								"{{cpf}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"let host = pm.environment.get(\"host\")",
+					"",
+					"",
+					"// CPFs:",
+					"pm.variables.set(\"cpf\",                        \"23650409003\")",
+					"pm.variables.set(\"cpf_invalido_alphanumerico\", \"2365040900T\")",
+					"pm.variables.set(\"cpf_invalido_numerico\",      \"23650409001\")",
+					"pm.variables.set(\"cpf_restricao\",              \"97093236014\")",
+					"",
+					"// Parcelas:",
+					"pm.variables.set(\"parcela_maxima\", 48)",
+					"pm.variables.set(\"parcela_minima\", 2)",
+					"",
+					"// Valor:",
+					"pm.variables.set(\"valor_maximo\", 40000)",
+					"pm.variables.set(\"valor_minimo\", 1000)",
+					"",
+					"",
+					"// Limpa o(s) cenario(s):",
+					"pm.sendRequest({ method: \"GET\", url: `${host}/api/v1/simulacoes` }, (error, response) => {",
+					"    response.json().forEach((simulacao) => pm.sendRequest({ method: \"DELETE\", url: `${host}/api/v1/simulacoes/${simulacao.id}` }))",
+					"    carregarCenarios()",
+					"})",
+					"",
+					"",
+					"// Carrega cenarios opcionais:",
+					"carregarCenarios = () => {",
+					"",
+					"    if(pm.request.headers.get(\"simulacao\")) {",
+					"",
+					"        let simulacao = {",
+					"            \"nome\": pm.variables.replaceIn('{{$randomFullName}}'),",
+					"            \"cpf\": pm.variables.get(\"cpf\"),",
+					"            \"email\": pm.variables.replaceIn('{{$randomEmail}}'),",
+					"            \"valor\": pm.variables.get(\"valor_maximo\"),",
+					"            \"parcelas\": pm.variables.get(\"parcela_maxima\"),",
+					"            \"seguro\": true",
+					"        }",
+					"",
+					"        pm.sendRequest({",
+					"            method: \"POST\",    ",
+					"            url: `${host}/api/v1/simulacoes`,",
+					"            header: { \"Content-Type\": \"application/json\" },",
+					"            body: {",
+					"                mode: 'raw',",
+					"                raw: JSON.stringify(simulacao)",
+					"            }",
+					"        }, (error, response) => {",
+					"            pm.variables.set(\"simulacao_id\", response.json().id)",
+					"        })",
+					"",
+					"    }",
+					"",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Time <= 200 ms\", () => pm.expect(pm.response.responseTime).to.be.below(200))"
+				]
+			}
+		}
+	]
+}
